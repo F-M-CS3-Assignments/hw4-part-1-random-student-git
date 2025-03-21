@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// I learnt merge from https://www.w3schools.com/cpp/ref_algorithm_merge.asp
+
 // pass by reference is probably more efficient
 vector<int> bdc_helper(const vector<int>& inputVector);
 vector<int> longest_vector(const vector<vector<int>>& candidates);
