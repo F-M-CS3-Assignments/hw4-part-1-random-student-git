@@ -40,21 +40,23 @@ vector<int> bdc_helper(const vector<int>& inputVector){
     }
     vector<vector<int>> candidates;
     for (int i=0;i<inputVector.size()-1;i++){
-        vector<int> L={inputVector[i]};
-        int j=find_next_dividend_position(inputVector,inputVector[i],i + 1);
-        if (j==-1){
-            if (!candidates.empty())
-                return longest_vector(candidates);
+        vector<int> L={inputVector[i]}; //  a small vector with input[i] as the only item
+        int j=find_next_dividend_position(inputVector,inputVector[i],i + 1); 
+        // from the position i+1
+        // find the position of next number in the input vector which is divisible by input[i]
+        if (j==-1){  // if there is no next dividend
+            if (!candidates.empty()) // if there are possibly longer vectors other than L
+                return longest_vector(candidates); 
             else
-                return L;
+                return L;  // L is the longest vector otherwise
         }
-        vector<int> Rin(inputVector.begin()+j,inputVector.end());
-        vector<int> R=bdc_helper(Rin);
-        vector<int> cand_v(L.size()+R.size());
-        merge(L.begin(),L.end(),R.begin(),R.end(),cand_v.begin());
-        candidates.push_back(cand_v);
+        vector<int> Rin(inputVector.begin()+j,inputVector.end()); //extract the sub vector from position j to the rest
+        vector<int> R=bdc_helper(Rin); // call the recursive function with a subproblem (a smaller input vector)
+        vector<int> cand_v(L.size()+R.size());  // combine input[i] with all the numbers which are divisible by input[i] and
+        merge(L.begin(),L.end(),R.begin(),R.end(),cand_v.begin());  // form a conglomerate
+        candidates.push_back(cand_v); // append the conglomerate to the list/vector
     }
-    return longest_vector(candidates);
+    return longest_vector(candidates); // returns the longest conglomerate inside the candidates
 }
 
 vector<int> longest_vector(const vector<vector<int>>& candidates){
