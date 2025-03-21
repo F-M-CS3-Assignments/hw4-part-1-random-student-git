@@ -9,15 +9,16 @@ using namespace std;
 
 // I learnt merge from https://www.w3schools.com/cpp/ref_algorithm_merge.asp
 
-// pass by reference is probably more efficient
-vector<int> bdc_helper(const vector<int>& inputVector);
-vector<int> longest_vector(const vector<vector<int>>& candidates);
-string vec_to_string(const vector<int>& vec);
-
-
-vector<int> biggest_divisible_conglomerate(vector<int> inputVector){
-    sort(inputVector.begin(),inputVector.end());  //sort vector before starting
-    return bdc_helper(inputVector);
+string vec_to_string(const vector<int>& vec){
+    string s="{";
+    for (int i=0;i<vec.size();i++){
+        s+=to_string(vec[i]); //concatenate the next element as string
+        if (i!=vec.size()-1){ //as long as we aren't on the last element, keep using commas
+            s+=",";
+        }
+    }
+    s+="}";
+    return s;
 }
 
 int find_next_dividend_position(const vector<int>& inputVector,int dividend,int pos){
@@ -34,6 +35,20 @@ int find_next_dividend_position(const vector<int>& inputVector,int dividend,int 
     }
     return next_dividend_position; 
     //returning -1 means that there's no next dividend, but returning anything else mean that there is
+}
+
+vector<int> longest_vector(const vector<vector<int>>& candidates){
+    int index=0; //default index
+    int max_size=candidates[0].size(); // default vector size (see next line's comment)
+    vector<int> longest_vec=candidates[0]; // basically, candidates[0] is default vector
+    for (int i=1;i<candidates.size();i++){
+        if (max_size<candidates[i].size()){ // for updating everything if a new maximum vector size is found
+            index=i;
+            longest_vec=candidates[i];
+            max_size=candidates[i].size();
+        }
+    }
+    return longest_vec;
 }
 
 vector<int> bdc_helper(const vector<int>& inputVector){
@@ -61,28 +76,14 @@ vector<int> bdc_helper(const vector<int>& inputVector){
     return longest_vector(candidates); // returns the longest conglomerate inside the candidates
 }
 
-vector<int> longest_vector(const vector<vector<int>>& candidates){
-    int index=0; //default index
-    int max_size=candidates[0].size(); // default vector size (see next line's comment)
-    vector<int> longest_vec=candidates[0]; // basically, candidates[0] is default vector
-    for (int i=1;i<candidates.size();i++){
-        if (max_size<candidates[i].size()){ // for updating everything if a new maximum vector size is found
-            index=i;
-            longest_vec=candidates[i];
-            max_size=candidates[i].size();
-        }
-    }
-    return longest_vec;
+
+
+
+vector<int> biggest_divisible_conglomerate(vector<int> inputVector){
+    sort(inputVector.begin(),inputVector.end());  //sort vector before starting
+    return bdc_helper(inputVector);
 }
 
-string vec_to_string(const vector<int>& vec){
-    string s="{";
-    for (int i=0;i<vec.size();i++){
-        s+=to_string(vec[i]); //concatenate the next element as string
-        if (i!=vec.size()-1){ //as long as we aren't on the last element, keep using commas
-            s+=",";
-        }
-    }
-    s+="}";
-    return s;
-}
+
+
+
